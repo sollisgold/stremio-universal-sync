@@ -115,7 +115,7 @@ input[type="text"]:focus{border-color:var(--accent)}
 
 <div class="card">
 <div class="card-title"><span class="step-badge">4</span>Sync Options</div>
-<div id="trakt-required-notice" style="display:none;padding:0.75rem 1rem;margin:0.5rem 0 1rem;background:rgba(255,107,157,0.1);border:1px solid rgba(255,107,157,0.3);border-radius:8px;color:#ff9bbf;font-size:0.9rem">Connect your Trakt account in step 2 to enable these sync options. Without Trakt these toggles will not affect your catalogs.</div>\n            <div id="trakt-options" style="opacity:0.4;pointer-events:none"><div class="toggle-row"><div><div class="toggle-label">Sync watched state</div><div class="toggle-sub">Mark episodes/movies watched in Stremio based on Trakt history</div></div><label class="toggle"><input type="checkbox" id="opt-watched" checked><span class="slider"></span></label></div>
+<div id="trakt-required-notice" style="display:none;padding:0.75rem 1rem;margin:0.5rem 0 1rem;background:rgba(255,107,157,0.1);border:1px solid rgba(255,107,157,0.3);border-radius:8px;color:#ff9bbf;font-size:0.9rem">Connect your Trakt account in step 2 to enable these sync options. Without Trakt these toggles will not affect your catalogs.</div><div id="trakt-options" style="opacity:0.4;pointer-events:none"><div class="toggle-row"><div><div class="toggle-label">Sync watched state</div><div class="toggle-sub">Mark episodes/movies watched in Stremio based on Trakt history</div></div><label class="toggle"><input type="checkbox" id="opt-watched" checked><span class="slider"></span></label></div>
 <div class="toggle-row"><div><div class="toggle-label">Scrobble to Trakt on play</div><div class="toggle-sub">Auto check-in when you play something in Stremio</div></div><label class="toggle"><input type="checkbox" id="opt-scrobble" checked><span class="slider"></span></label></div>
 <div class="toggle-row"><div><div class="toggle-label">Show Trakt Trending</div><div class="toggle-sub">Trending movies and series as Stremio catalog rows</div></div><label class="toggle"><input type="checkbox" id="opt-trending" checked><span class="slider"></span></label></div>
 <div class="toggle-row"><div><div class="toggle-label">Show Trakt Popular</div><div class="toggle-sub">Popular movies and series as Stremio catalog rows</div></div><label class="toggle"><input type="checkbox" id="opt-popular" checked><span class="slider"></span></label></div>
@@ -247,6 +247,8 @@ function installInStremio(){if(!state.generatedUrl)return;window.location.href='
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 
 function saveLocal(){localStorage.setItem('universalSyncConfig',JSON.stringify({tmdbBearerToken:document.getElementById('tmdb-token').value.trim(),imdbUserId:document.getElementById('imdb-user-id').value.trim(),imdbLists:state.imdbLists}));}
-\nif(!state.traktAccessToken){const n=document.getElementById('trakt-required-notice');if(n)n.style.display='block';}else{const n=document.getElementById('trakt-required-notice');if(n)n.style.display='none';const o=document.getElementById('trakt-options');if(o){o.style.opacity='1';o.style.pointerEvents='auto';}}\n</script>
+
+if(!state.traktAccessToken){const n=document.getElementById('trakt-required-notice');if(n)n.style.display='block';}else{const n=document.getElementById('trakt-required-notice');if(n)n.style.display='none';const o=document.getElementById('trakt-options');if(o){o.style.opacity='1';o.style.pointerEvents='auto';}}
+</script>
 </body>
 </html>
