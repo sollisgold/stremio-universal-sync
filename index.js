@@ -93,8 +93,24 @@ app.post('/generate-url', (req, res) => {
                                                                                                                 });
                                                                                                                 app.get('/manifest.json', (req, res) => {
                                                                                                                   cors(res);
-                                                                                                                    res.json(buildManifest(null));
+                                                                                                                    res.json(buildManifest({}));
                                                                                                                     });
+
+app.get('/catalog/:type/:id.json', async (req, res) => {
+    cors(res);
+    try {
+        const metas = await handleCatalog({}, req.params.id, req.params.type);
+        res.json({ metas });
+    } catch (err) { console.error('[catalog-bare]', err.message); res.json({ metas: [] }); }
+});
+
+app.get('/meta/:type/:id.json', async (req, res) => {
+    cors(res);
+    try {
+        const meta = await handleMeta({}, req.params.id, req.params.type);
+        res.json({ meta });
+    } catch (err) { console.error('[meta-bare]', err.message); res.json({ meta: null }); }
+});
                                                                                                                     
                                                                                                                     // Catalog
                                                                                                                     app.get('/:configB64/catalog/:type/:id.json', async (req, res) => {
