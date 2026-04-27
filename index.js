@@ -58,7 +58,24 @@ app.get('/auth/trakt', (req, res) => {
                                                                                                   });
 
                                                                                                   // Generate addon URL
-                                                                                                  app.post('/generate-url', (req, res) => {
+                                                                                                  app.post('/verify-tmdb', express.json(), async (req, res) => {
+    try {
+        const token = (req.body && req.body.token) ? String(req.body.token).trim() : '';
+        if (!token) return res.json({ success: false, error: 'No token provided' });
+        const r = await fetch('https://api.themoviedb.org/3/authentication', {
+            headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }
+        });
+        const data = await r.json().catch(() => ({}));
+        if (data && data.success === true) {
+            return res.json({ success: true });
+        }
+        return res.json({ success: false, error: (data && data.status_message) || ('HTTP ' + r.status) });
+    } catch (err) {
+        return res.json({ success: false, error: err.message || 'Unknown error' });
+    }
+});
+
+app.post('/generate-url', (req, res) => {
                                                                                                     const config   = req.body;
                                                                                                       const encoded  = encodeConfig(config);
                                                                                                         const addonUrl = `${PUBLIC_URL}/${encoded}/manifest.json`;
