@@ -66,7 +66,7 @@ input[type="text"]:focus{border-color:var(--accent)}
 <body>
 <div class="container">
 <header>
-<img src="https://ui-avatars.com/api/?name=MS&size=128&background=7b5ea7&color=ffffff&bold=true&format=png" alt="logo" style="width:72px;height:72px;border-radius:16px;display:block;margin:0 auto .5rem"/>
+<img src="https://api.dicebear.com/9.x/lorelei/png?seed=sakura&size=512&backgroundColor=ff6b9d,c084fc,b6e3f4&backgroundType=gradientLinear&radius=20" alt="logo" style="width:72px;height:72px;border-radius:16px;display:block;margin:0 auto .5rem"/>
 <h1>My Stremio List Syncer</h1>
 <p>Connect your accounts. Your lists become Stremio catalogs. Your history stays in sync.</p>
 </header>
@@ -119,7 +119,8 @@ input[type="text"]:focus{border-color:var(--accent)}
 <div class="toggle-row"><div><div class="toggle-label">Scrobble to Trakt on play</div><div class="toggle-sub">Auto check-in when you play something in Stremio</div></div><label class="toggle"><input type="checkbox" id="opt-scrobble" checked><span class="slider"></span></label></div>
 <div class="toggle-row"><div><div class="toggle-label">Show Trakt Trending</div><div class="toggle-sub">Trending movies and series as Stremio catalog rows</div></div><label class="toggle"><input type="checkbox" id="opt-trending" checked><span class="slider"></span></label></div>
 <div class="toggle-row"><div><div class="toggle-label">Show Trakt Popular</div><div class="toggle-sub">Popular movies and series as Stremio catalog rows</div></div><label class="toggle"><input type="checkbox" id="opt-popular" checked><span class="slider"></span></label></div>
-<div class="toggle-row"><div><div class="toggle-label">Show Trakt Recommendations</div><div class="toggle-sub">Personal recommendations based on your history</div></div><label class="toggle"><input type="checkbox" id="opt-recommendations" checked><span class="slider"></span></label></div>
+<div class="toggle-row"><div><div class="toggle-label">Show Trakt Watchlist</div><div class="toggle-sub">Your saved movies and series from Trakt</div></div><label class="toggle"><input type="checkbox" id="opt-watchlist" checked><span class="slider"></span></label></div>
+            <div class="toggle-row"><div><div class="toggle-label">Show Trakt Recommendations</div><div class="toggle-sub">Personal recommendations based on your history</div></div><label class="toggle"><input type="checkbox" id="opt-recommendations" checked><span class="slider"></span></label></div>
 </div>
 
 <div class="card">
@@ -226,7 +227,7 @@ traktUsername:state.traktUsername||null,
 traktLists:state.traktLists.filter(l=>l.selected).map(({name,slug,username})=>({name,slug,username})),
 imdbUserId:document.getElementById('imdb-user-id').value.trim()||null,
 imdbLists:state.imdbLists,
-options:{syncWatchedState:document.getElementById('opt-watched').checked,scrobble:document.getElementById('opt-scrobble').checked,showTrending:document.getElementById('opt-trending').checked,showPopular:document.getElementById('opt-popular').checked,showRecommendations:document.getElementById('opt-recommendations').checked},
+options:{syncWatchedState:document.getElementById('opt-watched').checked,scrobble:document.getElementById('opt-scrobble').checked,showTrending:document.getElementById('opt-trending').checked,showPopular:document.getElementById('opt-popular').checked,showWatchlist:document.getElementById('opt-watchlist').checked,showRecommendations:document.getElementById('opt-recommendations').checked},
 };
 try{
 const res=await fetch('/generate-url',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(config)});
