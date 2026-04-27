@@ -1,6 +1,6 @@
 # My Stremio List Syncer
 
-<img src="https://ui-avatars.com/api/?name=MS&size=128&background=7b5ea7&color=ffffff&bold=true&format=png" alt="logo" width="96" height="96"/>
+<img src="https://api.dicebear.com/9.x/lorelei/png?seed=sakura&size=512&backgroundColor=ff6b9d,c084fc,b6e3f4&backgroundType=gradientLinear&radius=20" alt="logo" width="96" height="96"/>
 
 **Bi-directional sync between Stremio, Trakt.tv, and IMDb.**
 Your lists become catalogs. Your history stays in sync. Automatic check-ins when you play.
