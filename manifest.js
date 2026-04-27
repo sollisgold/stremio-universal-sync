@@ -1,5 +1,5 @@
 const ADDON_ID      = 'community.stremio-universal-sync';
-const ADDON_VERSION = '1.1.0';
+const ADDON_VERSION = '1.2.0';
 
 function buildCatalogs(config) {
   const catalogs = [];
@@ -17,7 +17,7 @@ function buildCatalogs(config) {
                                                 );
                                                   }
 
-                                                    if (config?.traktAccessToken) {
+                                                    if (config?.traktAccessToken && (!config?.options || config.options.showWatchlist !== false)) {
                                                         catalogs.push(
                                                               { type: 'movie',  id: 'trakt:watchlist', name: 'Trakt Watchlist - Movies', extra: [{ name: 'skip' }] },
                                                                     { type: 'series', id: 'trakt:watchlist', name: 'Trakt Watchlist - Series', extra: [{ name: 'skip' }] }
@@ -52,8 +52,8 @@ function buildCatalogs(config) {
                                                                                                                                                                                 id:          ADDON_ID,
                                                                                                                                                                                     version:     ADDON_VERSION,
                                                                                                                                                                                         name:        'My Stremio List Syncer',
-                                logo:        'https://ui-avatars.com/api/?name=MS&size=256&background=7b5ea7&color=ffffff&bold=true&format=png',
-                                background:  'https://ui-avatars.com/api/?name=MSLS&size=1024&background=1a1a24&color=7b5ea7&bold=true&format=png',
+                                logo:        'https://api.dicebear.com/9.x/lorelei/png?seed=sakura&size=512&backgroundColor=ff6b9d,c084fc,b6e3f4&backgroundType=gradientLinear&radius=20',
+                                background:  'https://api.dicebear.com/9.x/lorelei/png?seed=sakura&size=1024&backgroundColor=1a1a24,7c3aed,ff6b9d&backgroundType=gradientLinear',
                                                                                                                                                                                             description: 'Bi-directional sync between Stremio, Trakt.tv, and IMDb. Your lists become catalogs. Your history stays in sync.',
                                                                                                                                                                                                 resources: [
                                                                                                                                                                                                       'catalog',
