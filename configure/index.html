@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Universal Sync - Configure</title>
+<style>
+:root{--bg:#0f0f13;--surface:#1a1a24;--border:#2a2a3a;--accent:#7b5ea7;--red:#e8432d;--text:#e8e8f0;--muted:#888;--green:#4caf82;--radius:12px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:2rem 1rem 4rem}
+.container{max-width:700px;margin:0 auto}
+header{text-align:center;margin-bottom:2.5rem}
+header h1{font-size:2rem;font-weight:700}
+header p{color:var(--muted);margin-top:.4rem;font-size:.95rem}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.25rem}
+.card-title{font-size:1rem;font-weight:600;margin-bottom:1rem;display:flex;align-items:center;gap:.6rem}
+.badge{font-size:.68rem;padding:2px 8px;border-radius:20px;font-weight:700;text-transform:uppercase}
+.badge-req{background:var(--red);color:#fff}
+.badge-opt{background:#2a2a3a;color:var(--muted)}
+.badge-ok{background:var(--green);color:#fff}
+label{display:block;font-size:.82rem;color:var(--muted);margin-bottom:.35rem}
+input[type="text"]{width:100%;padding:.65rem .9rem;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.9rem;outline:none;transition:border-color .15s}
+input[type="text"]:focus{border-color:var(--accent)}
+.form-row{margin-bottom:1rem}
+.help{font-size:.78rem;color:var(--muted);margin-top:.35rem}
+.help a{color:var(--accent);text-decoration:none}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.88rem;font-weight:600;cursor:pointer;border:none;text-decoration:none;transition:opacity .15s,transform .1s;white-space:nowrap}
+.btn:hover{opacity:.85;transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn-trakt{background:#ed1c24;color:#fff}
+.btn-accent{background:var(--accent);color:#fff}
+.btn-install{background:var(--green);color:#fff;font-size:1rem;padding:.9rem 2rem;border-radius:10px;width:100%;justify-content:center}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}
+.btn-sm{padding:.4rem .85rem;font-size:.8rem}
+.connected-box{background:rgba(76,175,130,.1);border:1px solid var(--green);border-radius:8px;padding:.8rem 1rem;display:flex;align-items:center;gap:.75rem;font-size:.88rem;margin-bottom:1rem}
+.dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.dot-green{background:var(--green)}
+.add-row{display:flex;gap:.5rem;margin-top:.6rem}
+.add-row input{flex:1}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.6rem}
+.chip{background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:3px 10px 3px 12px;font-size:.78rem;display:flex;align-items:center;gap:6px}
+.chip-remove{cursor:pointer;color:var(--muted);font-size:1rem;line-height:1;background:none;border:none;padding:0}
+.chip-remove:hover{color:var(--red)}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid var(--border)}
+.toggle-row:last-child{border-bottom:none;padding-bottom:0}
+.toggle-label{font-size:.88rem}
+.toggle-sub{font-size:.75rem;color:var(--muted);margin-top:2px}
+.toggle{position:relative;width:40px;height:22px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.slider{position:absolute;inset:0;background:var(--border);border-radius:22px;cursor:pointer;transition:background .2s}
+.slider:before{content:'';position:absolute;width:16px;height:16px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:transform .2s}
+.toggle input:checked+.slider{background:var(--accent)}
+.toggle input:checked+.slider:before{transform:translateX(18px)}
+.url-box{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.8rem 1rem;font-family:monospace;font-size:.78rem;word-break:break-all;color:var(--accent);cursor:pointer;user-select:all;margin:1rem 0}
+.install-section{text-align:center}
+.install-section .subtitle{color:var(--muted);font-size:.82rem;margin-top:.6rem}
+.copy-hint{font-size:.75rem;color:var(--muted);text-align:center;margin-top:.3rem}
+.step-badge{width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:.75rem;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.divider{border:none;border-top:1px solid var(--border);margin:1rem 0}
+#status-msg{font-size:.82rem;color:var(--green);margin-top:.5rem;min-height:1.2em;text-align:center}
+.list-checkbox-row{display:flex;align-items:center;gap:.5rem;padding:.3rem 0;font-size:.85rem}
+.list-checkbox-row input[type="checkbox"]{accent-color:var(--accent);width:15px;height:15px;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+<h1>Universal Sync</h1>
+<p>Connect your accounts. Your lists become Stremio catalogs. Your history stays in sync.</p>
+</header>
+
+<div class="card">
+<div class="card-title"><span class="step-badge">1</span>TMDB Token<span class="badge badge-req" id="tmdb-badge">Required</span></div>
+<div class="form-row">
+<label>TMDB Read Access Token (Bearer)</label>
+<input type="text" id="tmdb-token" placeholder="eyJhbGciOiJIUzI1NiJ9..."/>
+<div class="help">Free at <a href="https://www.themoviedb.org/settings/api" target="_blank">themoviedb.org/settings/api</a> - API Read Access Token</div>
+</div>
+<button class="btn btn-accent btn-sm" onclick="verifyTmdb()">Verify Token</button>
+<div id="tmdb-status" style="margin-top:.5rem;font-size:.82rem;"></div>
+</div>
+
+<div class="card">
+<div class="card-title"><span class="step-badge">2</span>Trakt.tv<span class="badge badge-opt" id="trakt-badge">Optional</span></div>
+<div id="trakt-disconnected">
+<p style="font-size:.85rem;color:var(--muted);margin-bottom:1rem">Connect Trakt to sync watchlists, history, and enable auto check-ins.</p>
+<a class="btn btn-trakt" href="/auth/trakt">Connect Trakt Account</a>
+</div>
+<div id="trakt-connected" style="display:none">
+<div class="connected-box"><div class="dot dot-green"></div><div>Connected as <strong id="trakt-username"></strong></div><button class="btn btn-outline btn-sm" onclick="disconnectTrakt()" style="margin-left:auto">Disconnect</button></div>
+<label>Your Trakt Lists</label>
+<div id="trakt-lists-container" style="color:var(--muted);font-size:.82rem">Loading...</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title"><span class="step-badge">3</span>IMDb<span class="badge badge-opt">Optional</span></div>
+<div class="form-row">
+<label>IMDb User ID</label>
+<input type="text" id="imdb-user-id" placeholder="ur12345678"/>
+<div class="help">Find at <a href="https://www.imdb.com/profile" target="_blank">imdb.com/profile</a> - copy ur######## from your URL</div>
+</div>
+<div class="form-row">
+<label>IMDb Custom List IDs</label>
+<div class="add-row">
+<input type="text" id="imdb-list-id-input" placeholder="ls012345678"/>
+<input type="text" id="imdb-list-name-input" placeholder="List name" style="max-width:180px"/>
+<button class="btn btn-outline btn-sm" onclick="addImdbList()">Add</button>
+</div>
+</div>
+<div id="imdb-lists" class="chips"></div>
+</div>
+
+<div class="card">
+<div class="card-title"><span class="step-badge">4</span>Sync Options</div>
+<div class="toggle-row"><div><div class="toggle-label">Sync watched state</div><div class="toggle-sub">Mark episodes/movies watched in Stremio based on Trakt history</div></div><label class="toggle"><input type="checkbox" id="opt-watched" checked><span class="slider"></span></label></div>
+<div class="toggle-row"><div><div class="toggle-label">Scrobble to Trakt on play</div><div class="toggle-sub">Auto check-in when you play something in Stremio</div></div><label class="toggle"><input type="checkbox" id="opt-scrobble" checked><span class="slider"></span></label></div>
+<div class="toggle-row"><div><div class="toggle-label">Show Trakt Trending</div><div class="toggle-sub">Trending movies and series as Stremio catalog rows</div></div><label class="toggle"><input type="checkbox" id="opt-trending" checked><span class="slider"></span></label></div>
+<div class="toggle-row"><div><div class="toggle-label">Show Trakt Popular</div><div class="toggle-sub">Popular movies and series as Stremio catalog rows</div></div><label class="toggle"><input type="checkbox" id="opt-popular" checked><span class="slider"></span></label></div>
+<div class="toggle-row"><div><div class="toggle-label">Show Trakt Recommendations</div><div class="toggle-sub">Personal recommendations based on your history</div></div><label class="toggle"><input type="checkbox" id="opt-recommendations" checked><span class="slider"></span></label></div>
+</div>
+
+<div class="card">
+<div class="card-title"><span class="step-badge">5</span>Install in Stremio</div>
+<button class="btn btn-accent" onclick="generateUrl()" style="margin-bottom:1rem">Generate Addon URL</button>
+<div id="url-section" style="display:none">
+<div class="url-box" id="addon-url" onclick="copyUrl()"></div>
+<div class="copy-hint">Click URL to copy</div>
+<div id="status-msg"></div>
+<hr class="divider"/>
+<div class="install-section">
+<button class="btn btn-install" onclick="installInStremio()">Install in Stremio</button>
+<div class="subtitle">Opens Stremio and installs automatically.<br/>Or paste the URL manually in Stremio > Addons > Install from URL.</div>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+const state={traktAccessToken:null,traktRefreshToken:null,traktExpiresAt:null,traktUsername:null,traktLists:[],imdbUserId:'',imdbLists:[],tmdbBearerToken:'',generatedUrl:''};
+
+window.addEventListener('DOMContentLoaded',()=>{
+const params=new URLSearchParams(window.location.search);
+if(params.has('trakt')){
+try{
+const decoded=JSON.parse(atob(params.get('trakt').replace(/-/g,'+').replace(/_/g,'/')));
+state.traktAccessToken=decoded.traktAccessToken;
+state.traktRefreshToken=decoded.traktRefreshToken;
+state.traktExpiresAt=decoded.traktExpiresAt;
+state.traktUsername=decoded.traktUsername;
+if(params.has('lists')){const lists=JSON.parse(decodeURIComponent(params.get('lists')));state.traktLists=lists.map(l=>({...l,selected:true}));}
+showTraktConnected();
+window.history.replaceState({},'','/configure');
+}catch(e){console.error(e);}
+}
+const saved=localStorage.getItem('universalSyncConfig');
+if(saved){try{const p=JSON.parse(saved);if(p.tmdbBearerToken)document.getElementById('tmdb-token').value=p.tmdbBearerToken;if(p.imdbUserId)document.getElementById('imdb-user-id').value=p.imdbUserId;if(p.imdbLists){state.imdbLists=p.imdbLists;renderImdbLists();}}catch{}}
+});
+
+async function verifyTmdb(){
+const token=document.getElementById('tmdb-token').value.trim();
+const status=document.getElementById('tmdb-status');
+if(!token){status.textContent='Please enter your token first.';status.style.color='var(--red)';return;}
+status.textContent='Verifying...';status.style.color='var(--muted)';
+try{
+const res=await fetch('https://api.themoviedb.org/3/authentication',{headers:{Authorization:`Bearer ${token}`}});
+const data=await res.json();
+if(data.success){status.textContent='Valid!';status.style.color='var(--green)';document.getElementById('tmdb-badge').textContent='Connected';document.getElementById('tmdb-badge').className='badge badge-ok';state.tmdbBearerToken=token;saveLocal();}
+else{throw new Error(data.status_message||'Invalid');}
+}catch(err){status.textContent='Error: '+err.message;status.style.color='var(--red)';}
+}
+
+function showTraktConnected(){
+document.getElementById('trakt-disconnected').style.display='none';
+document.getElementById('trakt-connected').style.display='block';
+document.getElementById('trakt-username').textContent=state.traktUsername||'you';
+document.getElementById('trakt-badge').textContent='Connected';
+document.getElementById('trakt-badge').className='badge badge-ok';
+renderTraktLists();
+}
+
+function disconnectTrakt(){
+state.traktAccessToken=null;state.traktRefreshToken=null;state.traktUsername=null;state.traktLists=[];
+document.getElementById('trakt-disconnected').style.display='block';
+document.getElementById('trakt-connected').style.display='none';
+document.getElementById('trakt-badge').textContent='Optional';
+document.getElementById('trakt-badge').className='badge badge-opt';
+}
+
+function renderTraktLists(){
+const c=document.getElementById('trakt-lists-container');
+if(!state.traktLists.length){c.innerHTML='<span>No custom lists found.</span>';return;}
+c.innerHTML=state.traktLists.map((l,i)=>`<div class="list-checkbox-row"><input type="checkbox" id="tlist-${i}" ${l.selected?'checked':''} onchange="toggleTraktList(${i},this.checked)"/><label for="tlist-${i}" style="cursor:pointer;margin:0">${esc(l.name)}</label></div>`).join('');
+}
+
+function toggleTraktList(i,v){if(state.traktLists[i])state.traktLists[i].selected=v;}
+
+function addImdbList(){
+const id=document.getElementById('imdb-list-id-input').value.trim();
+const name=document.getElementById('imdb-list-name-input').value.trim()||id;
+if(!id)return;
+if(!state.imdbLists.find(l=>l.id===id)){state.imdbLists.push({id,name});}
+document.getElementById('imdb-list-id-input').value='';
+document.getElementById('imdb-list-name-input').value='';
+renderImdbLists();saveLocal();
+}
+
+function removeImdbList(id){state.imdbLists=state.imdbLists.filter(l=>l.id!==id);renderImdbLists();saveLocal();}
+
+function renderImdbLists(){
+document.getElementById('imdb-lists').innerHTML=state.imdbLists.map(l=>`<div class="chip">${esc(l.name)}<button class="chip-remove" onclick="removeImdbList('${esc(l.id)}')">x</button></div>`).join('');
+}
+
+async function generateUrl(){
+const tmdbToken=document.getElementById('tmdb-token').value.trim();
+if(!tmdbToken){alert('Please verify your TMDB token first.');return;}
+const config={
+tmdbBearerToken:tmdbToken,
+traktAccessToken:state.traktAccessToken||null,
+traktRefreshToken:state.traktRefreshToken||null,
+traktExpiresAt:state.traktExpiresAt||null,
+traktUsername:state.traktUsername||null,
+traktLists:state.traktLists.filter(l=>l.selected).map(({name,slug,username})=>({name,slug,username})),
+imdbUserId:document.getElementById('imdb-user-id').value.trim()||null,
+imdbLists:state.imdbLists,
+options:{syncWatchedState:document.getElementById('opt-watched').checked,scrobble:document.getElementById('opt-scrobble').checked,showTrending:document.getElementById('opt-trending').checked,showPopular:document.getElementById('opt-popular').checked,showRecommendations:document.getElementById('opt-recommendations').checked},
+};
+try{
+const res=await fetch('/generate-url',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(config)});
+const data=await res.json();
+state.generatedUrl=data.url;
+document.getElementById('addon-url').textContent=data.url;
+document.getElementById('url-section').style.display='block';
+saveLocal();
+}catch(err){alert('Error: '+err.message);}
+}
+
+function copyUrl(){if(!state.generatedUrl)return;navigator.clipboard.writeText(state.generatedUrl).then(()=>{const m=document.getElementById('status-msg');m.textContent='Copied!';setTimeout(()=>{m.textContent='';},2000);});}
+
+function installInStremio(){if(!state.generatedUrl)return;window.location.href='stremio://'+state.generatedUrl.replace(/^https?:\/\//,'');}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+
+function saveLocal(){localStorage.setItem('universalSyncConfig',JSON.stringify({tmdbBearerToken:document.getElementById('tmdb-token').value.trim(),imdbUserId:document.getElementById('imdb-user-id').value.trim(),imdbLists:state.imdbLists}));}
+</script>
+</body>
+</html>
