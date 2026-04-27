@@ -1,5 +1,5 @@
 const ADDON_ID      = 'community.stremio-universal-sync';
-const ADDON_VERSION = '1.0.0';
+const ADDON_VERSION = '1.1.0';
 
 function buildCatalogs(config) {
   const catalogs = [];
