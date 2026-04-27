@@ -115,12 +115,12 @@ input[type="text"]:focus{border-color:var(--accent)}
 
 <div class="card">
 <div class="card-title"><span class="step-badge">4</span>Sync Options</div>
-<div class="toggle-row"><div><div class="toggle-label">Sync watched state</div><div class="toggle-sub">Mark episodes/movies watched in Stremio based on Trakt history</div></div><label class="toggle"><input type="checkbox" id="opt-watched" checked><span class="slider"></span></label></div>
+<div id="trakt-required-notice" style="display:none;padding:0.75rem 1rem;margin:0.5rem 0 1rem;background:rgba(255,107,157,0.1);border:1px solid rgba(255,107,157,0.3);border-radius:8px;color:#ff9bbf;font-size:0.9rem">Connect your Trakt account in step 2 to enable these sync options. Without Trakt these toggles will not affect your catalogs.</div>\n            <div id="trakt-options" style="opacity:0.4;pointer-events:none"><div class="toggle-row"><div><div class="toggle-label">Sync watched state</div><div class="toggle-sub">Mark episodes/movies watched in Stremio based on Trakt history</div></div><label class="toggle"><input type="checkbox" id="opt-watched" checked><span class="slider"></span></label></div>
 <div class="toggle-row"><div><div class="toggle-label">Scrobble to Trakt on play</div><div class="toggle-sub">Auto check-in when you play something in Stremio</div></div><label class="toggle"><input type="checkbox" id="opt-scrobble" checked><span class="slider"></span></label></div>
 <div class="toggle-row"><div><div class="toggle-label">Show Trakt Trending</div><div class="toggle-sub">Trending movies and series as Stremio catalog rows</div></div><label class="toggle"><input type="checkbox" id="opt-trending" checked><span class="slider"></span></label></div>
 <div class="toggle-row"><div><div class="toggle-label">Show Trakt Popular</div><div class="toggle-sub">Popular movies and series as Stremio catalog rows</div></div><label class="toggle"><input type="checkbox" id="opt-popular" checked><span class="slider"></span></label></div>
 <div class="toggle-row"><div><div class="toggle-label">Show Trakt Watchlist</div><div class="toggle-sub">Your saved movies and series from Trakt</div></div><label class="toggle"><input type="checkbox" id="opt-watchlist" checked><span class="slider"></span></label></div>
-            <div class="toggle-row"><div><div class="toggle-label">Show Trakt Recommendations</div><div class="toggle-sub">Personal recommendations based on your history</div></div><label class="toggle"><input type="checkbox" id="opt-recommendations" checked><span class="slider"></span></label></div>
+            <div class="toggle-row"><div><div class="toggle-label">Show Trakt Recommendations</div><div class="toggle-sub">Personal recommendations based on your history</div></div><label class="toggle"><input type="checkbox" id="opt-recommendations" checked><span class="slider"></span></label></div></div>
 </div>
 
 <div class="card">
@@ -164,12 +164,13 @@ async function verifyTmdb(){
 const token=document.getElementById('tmdb-token').value.trim();
 const status=document.getElementById('tmdb-status');
 if(!token){status.textContent='Please enter your token first.';status.style.color='var(--red)';return;}
+if(token.length<40){status.textContent='That looks like a v3 API key. You need the v4 Read Access Token (much longer, JWT-style starts with eyJ...).';status.style.color='var(--red)';return;}
 status.textContent='Verifying...';status.style.color='var(--muted)';
 try{
-const res=await fetch('https://api.themoviedb.org/3/authentication',{headers:{Authorization:`Bearer ${token}`}});
+const res=await fetch('/verify-tmdb',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token})});
 const data=await res.json();
-if(data.success){status.textContent='Valid!';status.style.color='var(--green)';document.getElementById('tmdb-badge').textContent='Connected';document.getElementById('tmdb-badge').className='badge badge-ok';state.tmdbBearerToken=token;saveLocal();}
-else{throw new Error(data.status_message||'Invalid');}
+if(data.success){status.textContent='Valid - TMDB connected!';status.style.color='var(--green)';document.getElementById('tmdb-badge').textContent='Connected';document.getElementById('tmdb-badge').className='badge badge-ok';state.tmdbBearerToken=token;saveLocal();}
+else{status.textContent='Invalid: '+(data.error||'token rejected by TMDB');status.style.color='var(--red)';}
 }catch(err){status.textContent='Error: '+err.message;status.style.color='var(--red)';}
 }
 
@@ -179,12 +180,12 @@ document.getElementById('trakt-connected').style.display='block';
 document.getElementById('trakt-username').textContent=state.traktUsername||'you';
 document.getElementById('trakt-badge').textContent='Connected';
 document.getElementById('trakt-badge').className='badge badge-ok';
-renderTraktLists();
+renderTraktLists();document.getElementById('trakt-required-notice').style.display='none';document.getElementById('trakt-options').style.opacity='1';document.getElementById('trakt-options').style.pointerEvents='auto';
 }
 
 function disconnectTrakt(){
 state.traktAccessToken=null;state.traktRefreshToken=null;state.traktUsername=null;state.traktLists=[];
-document.getElementById('trakt-disconnected').style.display='block';
+document.getElementById('trakt-disconnected').style.display='block';document.getElementById('trakt-required-notice').style.display='block';document.getElementById('trakt-options').style.opacity='0.4';document.getElementById('trakt-options').style.pointerEvents='none';
 document.getElementById('trakt-connected').style.display='none';
 document.getElementById('trakt-badge').textContent='Optional';
 document.getElementById('trakt-badge').className='badge badge-opt';
@@ -246,6 +247,6 @@ function installInStremio(){if(!state.generatedUrl)return;window.location.href='
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 
 function saveLocal(){localStorage.setItem('universalSyncConfig',JSON.stringify({tmdbBearerToken:document.getElementById('tmdb-token').value.trim(),imdbUserId:document.getElementById('imdb-user-id').value.trim(),imdbLists:state.imdbLists}));}
-</script>
+\nif(!state.traktAccessToken){const n=document.getElementById('trakt-required-notice');if(n)n.style.display='block';}else{const n=document.getElementById('trakt-required-notice');if(n)n.style.display='none';const o=document.getElementById('trakt-options');if(o){o.style.opacity='1';o.style.pointerEvents='auto';}}\n</script>
 </body>
 </html>
