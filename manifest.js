@@ -51,7 +51,9 @@ function buildCatalogs(config) {
                                                                                                                                                                             return {
                                                                                                                                                                                 id:          ADDON_ID,
                                                                                                                                                                                     version:     ADDON_VERSION,
-                                                                                                                                                                                        name:        'Universal Sync',
+                                                                                                                                                                                        name:        'My Stremio List Syncer',
+                                logo:        'https://ui-avatars.com/api/?name=MS&size=256&background=7b5ea7&color=ffffff&bold=true&format=png',
+                                background:  'https://ui-avatars.com/api/?name=MSLS&size=1024&background=1a1a24&color=7b5ea7&bold=true&format=png',
                                                                                                                                                                                             description: 'Bi-directional sync between Stremio, Trakt.tv, and IMDb. Your lists become catalogs. Your history stays in sync.',
                                                                                                                                                                                                 resources: [
                                                                                                                                                                                                       'catalog',
