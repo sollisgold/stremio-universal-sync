@@ -96,25 +96,7 @@ input[type="text"]:focus{border-color:var(--accent)}
 </div>
 
 <div class="card">
-<div class="card-title"><span class="step-badge">3</span>IMDb<span class="badge badge-opt">Optional</span></div>
-<div class="form-row">
-<label>IMDb User ID</label>
-<input type="text" id="imdb-user-id" placeholder="ur12345678"/>
-<div class="help">Find at <a href="https://www.imdb.com/profile" target="_blank">imdb.com/profile</a> - copy ur######## from your URL</div>
-</div>
-<div class="form-row">
-<label>IMDb Custom List IDs</label>
-<div class="add-row">
-<input type="text" id="imdb-list-id-input" placeholder="ls012345678"/>
-<input type="text" id="imdb-list-name-input" placeholder="List name" style="max-width:180px"/>
-<button class="btn btn-outline btn-sm" onclick="addImdbList()">Add</button>
-</div>
-</div>
-<div id="imdb-lists" class="chips"></div>
-</div>
-
-<div class="card">
-<div class="card-title"><span class="step-badge">4</span>Sync Options</div>
+<div class="card-title"><span class="step-badge">3</span>Sync Options</div>
 <div id="trakt-required-notice" style="display:none;padding:0.75rem 1rem;margin:0.5rem 0 1rem;background:rgba(255,107,157,0.1);border:1px solid rgba(255,107,157,0.3);border-radius:8px;color:#ff9bbf;font-size:0.9rem">Connect your Trakt account in step 2 to enable these sync options. Without Trakt these toggles will not affect your catalogs.</div><div id="trakt-options" style="opacity:0.4;pointer-events:none"><div class="toggle-row"><div><div class="toggle-label">Sync watched state</div><div class="toggle-sub">Mark episodes/movies watched in Stremio based on Trakt history</div></div><label class="toggle"><input type="checkbox" id="opt-watched" checked><span class="slider"></span></label></div>
 <div class="toggle-row"><div><div class="toggle-label">Scrobble to Trakt on play</div><div class="toggle-sub">Auto check-in when you play something in Stremio</div></div><label class="toggle"><input type="checkbox" id="opt-scrobble" checked><span class="slider"></span></label></div>
 <div class="toggle-row"><div><div class="toggle-label">Show Trakt Trending</div><div class="toggle-sub">Trending movies and series as Stremio catalog rows</div></div><label class="toggle"><input type="checkbox" id="opt-trending" checked><span class="slider"></span></label></div>
@@ -124,7 +106,7 @@ input[type="text"]:focus{border-color:var(--accent)}
 </div>
 
 <div class="card">
-<div class="card-title"><span class="step-badge">5</span>Install in Stremio</div>
+<div class="card-title"><span class="step-badge">4</span>Install in Stremio</div>
 <button class="btn btn-accent" onclick="generateUrl()" style="margin-bottom:1rem">Generate Addon URL</button>
 <div id="url-section" style="display:none">
 <div class="url-box" id="addon-url" onclick="copyUrl()"></div>
@@ -140,7 +122,7 @@ input[type="text"]:focus{border-color:var(--accent)}
 </div>
 
 <script>
-const state={traktAccessToken:null,traktRefreshToken:null,traktExpiresAt:null,traktUsername:null,traktLists:[],imdbUserId:'',imdbLists:[],tmdbBearerToken:'',generatedUrl:''};
+const state={traktAccessToken:null,traktRefreshToken:null,traktExpiresAt:null,traktUsername:null,traktLists:[],tmdbBearerToken:'',generatedUrl:''};
 
 window.addEventListener('DOMContentLoaded',()=>{
 const params=new URLSearchParams(window.location.search);
@@ -157,7 +139,7 @@ window.history.replaceState({},'','/configure');
 }catch(e){console.error(e);}
 }
 const saved=localStorage.getItem('universalSyncConfig');
-if(saved){try{const p=JSON.parse(saved);if(p.tmdbBearerToken)document.getElementById('tmdb-token').value=p.tmdbBearerToken;if(p.imdbUserId)document.getElementById('imdb-user-id').value=p.imdbUserId;if(p.imdbLists){state.imdbLists=p.imdbLists;renderImdbLists();}}catch{}}
+if(saved){try{const p=JSON.parse(saved);if(p.tmdbBearerToken)document.getElementById('tmdb-token').value=p.tmdbBearerToken;}catch{}}
 });
 
 async function verifyTmdb(){
@@ -199,26 +181,10 @@ c.innerHTML=state.traktLists.map((l,i)=>`<div class="list-checkbox-row"><input t
 
 function toggleTraktList(i,v){if(state.traktLists[i])state.traktLists[i].selected=v;}
 
-function addImdbList(){
-const id=document.getElementById('imdb-list-id-input').value.trim();
-const name=document.getElementById('imdb-list-name-input').value.trim()||id;
-if(!id)return;
-if(!state.imdbLists.find(l=>l.id===id)){state.imdbLists.push({id,name});}
-document.getElementById('imdb-list-id-input').value='';
-document.getElementById('imdb-list-name-input').value='';
-renderImdbLists();saveLocal();
-}
-
-function removeImdbList(id){state.imdbLists=state.imdbLists.filter(l=>l.id!==id);renderImdbLists();saveLocal();}
-
-function renderImdbLists(){
-document.getElementById('imdb-lists').innerHTML=state.imdbLists.map(l=>`<div class="chip">${esc(l.name)}<button class="chip-remove" onclick="removeImdbList('${esc(l.id)}')">x</button></div>`).join('');
-}
-
 async function generateUrl(){
 const tmdbToken=document.getElementById('tmdb-token').value.trim();
-const hasAny = tmdbToken || state.traktAccessToken || (document.getElementById('imdb-user-id').value.trim()) ;
-if(!hasAny){alert('Please connect at least one service: TMDB, Trakt, or IMDb.');return;}
+const hasAny = tmdbToken || state.traktAccessToken;
+if(!hasAny){alert('Please connect at least one service: TMDB or Trakt.');return;}
 const config={
 tmdbBearerToken:tmdbToken||null,
 traktAccessToken:state.traktAccessToken||null,
@@ -226,8 +192,6 @@ traktRefreshToken:state.traktRefreshToken||null,
 traktExpiresAt:state.traktExpiresAt||null,
 traktUsername:state.traktUsername||null,
 traktLists:state.traktLists.filter(l=>l.selected).map(({name,slug,username})=>({name,slug,username})),
-imdbUserId:document.getElementById('imdb-user-id').value.trim()||null,
-imdbLists:state.imdbLists,
 options:{syncWatchedState:document.getElementById('opt-watched').checked,scrobble:document.getElementById('opt-scrobble').checked,showTrending:document.getElementById('opt-trending').checked,showPopular:document.getElementById('opt-popular').checked,showWatchlist:document.getElementById('opt-watchlist').checked,showRecommendations:document.getElementById('opt-recommendations').checked},
 };
 try{
@@ -246,7 +210,7 @@ function installInStremio(){if(!state.generatedUrl)return;window.location.href='
 
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 
-function saveLocal(){localStorage.setItem('universalSyncConfig',JSON.stringify({tmdbBearerToken:document.getElementById('tmdb-token').value.trim(),imdbUserId:document.getElementById('imdb-user-id').value.trim(),imdbLists:state.imdbLists}));}
+function saveLocal(){localStorage.setItem('universalSyncConfig',JSON.stringify({tmdbBearerToken:document.getElementById('tmdb-token').value.trim()}));}
 
 if(!state.traktAccessToken){const n=document.getElementById('trakt-required-notice');if(n)n.style.display='block';}else{const n=document.getElementById('trakt-required-notice');if(n)n.style.display='none';const o=document.getElementById('trakt-options');if(o){o.style.opacity='1';o.style.pointerEvents='auto';}}
 </script>
