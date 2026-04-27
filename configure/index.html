@@ -71,7 +71,7 @@ input[type="text"]:focus{border-color:var(--accent)}
 </header>
 
 <div class="card">
-<div class="card-title"><span class="step-badge">1</span>TMDB Token<span class="badge badge-req" id="tmdb-badge">Required</span></div>
+<div class="card-title"><span class="step-badge">1</span>TMDB Token<span class="badge badge-opt" id="tmdb-badge">Optional</span></div>
 <div class="form-row">
 <label>TMDB Read Access Token (Bearer)</label>
 <input type="text" id="tmdb-token" placeholder="eyJhbGciOiJIUzI1NiJ9..."/>
@@ -214,9 +214,10 @@ document.getElementById('imdb-lists').innerHTML=state.imdbLists.map(l=>`<div cla
 
 async function generateUrl(){
 const tmdbToken=document.getElementById('tmdb-token').value.trim();
-if(!tmdbToken){alert('Please verify your TMDB token first.');return;}
+const hasAny = tmdbToken || state.traktAccessToken || (document.getElementById('imdb-user-id').value.trim()) ;
+if(!hasAny){alert('Please connect at least one service: TMDB, Trakt, or IMDb.');return;}
 const config={
-tmdbBearerToken:tmdbToken,
+tmdbBearerToken:tmdbToken||null,
 traktAccessToken:state.traktAccessToken||null,
 traktRefreshToken:state.traktRefreshToken||null,
 traktExpiresAt:state.traktExpiresAt||null,
