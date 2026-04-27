@@ -1,4 +1,6 @@
-# Universal Sync — Stremio Addon
+# My Stremio List Syncer
+
+<img src="https://ui-avatars.com/api/?name=MS&size=128&background=7b5ea7&color=ffffff&bold=true&format=png" alt="logo" width="96" height="96"/>
 
 **Bi-directional sync between Stremio, Trakt.tv, and IMDb.**
 Your lists become catalogs. Your history stays in sync. Automatic check-ins when you play.
