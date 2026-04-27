@@ -20,7 +20,10 @@ async function traktItemToMeta(item, tmdbToken) {
   if (!stremioId) return null;
   const media = item.movie || item.show;
   const stremioType = type === 'tv' ? 'series' : type;
-  const base = { id: stremioId, type: stremioType, name: media?.title || 'Unknown', releaseInfo: media?.year?.toString() || null, poster: null };
+  const metahubPoster = stremioId.startsWith('tt') ? `https://images.metahub.space/poster/medium/${stremioId}/img` : null;
+  const metahubBackground = stremioId.startsWith('tt') ? `https://images.metahub.space/background/medium/${stremioId}/img` : null;
+  const metahubLogo = stremioId.startsWith('tt') ? `https://images.metahub.space/logo/medium/${stremioId}/img` : null;
+  const base = { id: stremioId, type: stremioType, name: media?.title || 'Unknown', releaseInfo: media?.year?.toString() || null, poster: metahubPoster, background: metahubBackground, logo: metahubLogo, posterShape: 'poster' };
   if (stremioId.startsWith('tt') && tmdbToken) return await enrichWithTmdb(base, tmdbToken);
   return base;
   }
