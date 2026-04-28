@@ -1,4 +1,6 @@
-# My Stremio List Syncer
+> **Note:** This repository is connected to the Render web service project at https://dashboard.render.com/web/srv-d7nmk75ckfvc73f3gbig.
+>
+> # My Stremio List Syncer
 
 <img src="https://api.dicebear.com/9.x/lorelei/png?seed=sakura&size=512&backgroundColor=ff6b9d,c084fc,b6e3f4&backgroundType=gradientLinear&radius=20" alt="logo" width="96" height="96"/>
 
